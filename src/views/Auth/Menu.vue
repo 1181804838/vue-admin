@@ -7,7 +7,6 @@
 			<el-alert title="Tips" type="warning" description="设置后台管理系统的左侧菜单，目前至多支持两层菜单，三层以上菜单将不会显示。" show-icon :closable="false">
 			</el-alert>
 
-
 			<!-- 树形组件 -->
 			<el-tree ref="tree" :load="loadNode" node-key="id" :default-expanded-keys="[1]" lazy :props="defaultProps">
 				<span class="custom-tree-node" slot-scope="{ node, data }">
@@ -20,8 +19,6 @@
 								图标
 							</el-button>
 						</el-popover>
-
-
 
 						<el-button type="text" icon="el-icon-edit-outline" :disabled="node.level==1" size="mini" @click.stop="() => openEditModal(node,data)">
 							编辑
@@ -45,12 +42,11 @@
 		</el-card>
 		<el-dialog title="选择图标" :visible.sync="iconShow" class="icon-dialog">
 			<ul class="icon-list">
-				<li v-for="(item,index) in iconlist" @click="changStatus(index)" :class="{'checked' :item.isSelect}" :key="item.id">
+				<li v-for="(item,index) in iconlist" @click="changStatus(index,item)" :class="{'checked' :item.isSelect}" :key="item.id">
 					<span>
 						<i :class="item.name"></i>
 						<span>{{item.name}}</span>
 					</span>
-
 				</li>
 			</ul>
 			<el-pagination background @current-change="handleCurrentChange" :current-page="currentPage1" :page-size="1" layout="->,prev, pager, next "
@@ -142,8 +138,17 @@
 				editIcon: {
 					id: '',
 					icon: '',
-				}
-
+					name:'',
+				},
+				nodeData:{
+					
+				},
+				
+				// editIconDom: {
+				// 	id: '',
+				// 	icon: '',
+				// 	name:'',
+				// },
 			};
 		},
 		methods: {
@@ -172,6 +177,7 @@
 				this.editModalShow = true;
 				this.node = node;
 				this.editForm = { ...data };
+				this.nodeData=data;
 			},
 			//编辑
 			async handleUpdateNode() {
@@ -232,6 +238,7 @@
 					})
 					console.log(this.iconlist);
 				}
+				this.nodeData=data;
 				this.iconShow = true;
 			},
 			async handleCurrentChange(val) {
@@ -247,9 +254,9 @@
 					console.log(this.iconlist);
 				}
 			},
-			changStatus(i) {
+			changStatus(i,it) {
+				this.editIcon.name=it.name;
 				this.index = i;
-				console.log(this.index);
 				this.$forceUpdate(this.iconlist[i].isSelect = true);
 				for (var j = 0; j < this.iconlist.length; j++) {
 					if (i == j) {
@@ -265,7 +272,8 @@
 			async handleEditIcon() {
 				let { status, msg } = await Icon.edit(this.editIcon);
 				if (status) {
-					// console.log(this.data);
+					this.nodeData.icon=this.editIcon.name;
+					console.log(this.nodeData);
 					this.$message.success(msg);
 					this.iconShow = false
 				}

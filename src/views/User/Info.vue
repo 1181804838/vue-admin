@@ -79,20 +79,6 @@
 				action: '/api/upload/avatar',
 				options: [],
 				rules: {
-					username: [{
-							type: 'string',
-							required: true,
-							message: '请输入用户名！',
-							trigger: 'blur'
-						},
-						{
-							min: 3,
-							max: 15,
-							message: '长度在3-15个字符',
-							trigger: 'blur'
-						}
-
-					],
 					fullname: [{
 							required: true,
 							message: '请输入真实姓名！',
@@ -166,7 +152,10 @@
 					if (!valid) {
 						return false;
 					}
-
+					let { status, data,msg } = await User.upload(this.ruleForm);
+					if (status) {
+						this.$message.success(msg);
+					}
 				});
 			},
 

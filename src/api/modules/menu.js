@@ -10,9 +10,13 @@ let remove = (data) => axios.delete('/api/menu', { params: data });
 //编辑分类
 let edit = (data) => axios.put('/api/menu', data);
 
+//根据角色id获取侧边栏树形菜单
+let loadMenu = (data) => axios.get('/api/menu/tree', { params: data });
+
 export default {
 	subcate,
 	insert,
 	remove,
 	edit,
+	loadMenu,
 }

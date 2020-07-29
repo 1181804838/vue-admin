@@ -5,35 +5,38 @@
 			<i @click="handleclick" class="el-icon-s-fold"></i>
 		</div>
 		<div class="navbar-select">
-			<el-dropdown>
-				<span class="el-dropdown-link" v-model="person">
-					<el-avatar :src="person.avatar" :size='30' class="img"></el-avatar>
-					{{person.username}}<i class="el-icon-arrow-down el-icon--right"></i>
-				</span>
-				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item>消息</el-dropdown-item>
-					<el-dropdown-item>设置</el-dropdown-item>
-					<el-dropdown-item>退出</el-dropdown-item>
-				</el-dropdown-menu>
-			</el-dropdown>
+			<el-menu router class="el-menu-demo" mode="horizontal" background-color="#31404E" text-color="#fff" active-text-color="#ffd04b">
+				<el-submenu index="1">
+					<template slot="title">
+						<span class="el-dropdown-link" v-model="person">
+							<el-avatar :src="person.avatar" :size='30' class="img"></el-avatar>
+							{{person.username}}
+						</span>
+					</template>
+					<el-menu-item index="/user/list">消息</el-menu-item>
+					<el-menu-item index="/user/info">设置</el-menu-item>
+					<el-menu-item index="/login">退出</el-menu-item>
+				</el-submenu>
+			</el-menu>
+
 		</div>
 	</div>
 </template>
 
 <script>
 	import { User } from '@/api/index'
-	export default{
-		data(){
-			return{
-				person:[],
+	export default {
+		data() {
+			return {
+				person: [],
 			}
 		},
 		created() {
 			//获取数据
 			this.loadinfo();
 		},
-		methods:{
-			handleclick(){
+		methods: {
+			handleclick() {
 				this.$emit('change');
 			},
 			async loadinfo() {
@@ -42,7 +45,7 @@
 				if (status) {
 					this.person = data;
 				}
-			
+
 			},
 		}
 	}
@@ -51,9 +54,9 @@
 <style>
 	.navbar {
 		background-color: #31404E;
-		height: 55px;
+		height: 60px;
 		color: white;
-		line-height: 55px;
+		line-height: 60px;
 		padding-left: 20px;
 		display: flex;
 		justify-content: space-between;
@@ -61,7 +64,7 @@
 	}
 
 	.navbar-logo {
-		height: 55px;
+		height: 60px;
 		box-sizing: border-box;
 	}
 
@@ -80,9 +83,11 @@
 	.el-icon-arrow-down {
 		font-size: 12px;
 	}
+
 	.el-avatar {
-			position: absolute;
-			top: 13px;
-			right: 65px;
-		}
+		/* position: absolute;
+		top: 13px;
+		right: 100px; */
+		margin-right: 5px;
+	}
 </style>
